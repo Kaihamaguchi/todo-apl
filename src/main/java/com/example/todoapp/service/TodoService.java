@@ -13,19 +13,19 @@ public class TodoService {
     @Autowired
     private TodoRepository todoRepository;
 
-    public List<Todo> findAll() {
+    public List<Todo> getAllTodos() {
         return todoRepository.findAll();
+    }
+
+    public Todo saveTodo(Todo todo) {
+        return todoRepository.save(todo);
+    }
+
+    public void deleteTodoById(Integer id) {
+        todoRepository.deleteById(id);
     }
 
     public Optional<Todo> findById(Integer id) {
         return todoRepository.findById(id);
-    }
-
-    public Todo save(Todo todo) {
-        return todoRepository.save(todo);
-    }
-
-    public void deleteById(Integer id) {
-        todoRepository.deleteById(id);
     }
 }
