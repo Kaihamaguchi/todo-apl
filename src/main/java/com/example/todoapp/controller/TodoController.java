@@ -1,44 +1,47 @@
 package com.example.todoapp.controller;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.example.todoapp.model.Todo;
 import com.example.todoapp.service.TodoService;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:8080")  // Vue.jsのデフォルトポート
+@RestController
+@RequestMapping("/api/todos")  // APIのベースURLを設定
 public class TodoController {
 
     @Autowired
     private TodoService todoService;
 
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/index.html";
+    @GetMapping
+    public List<Todo> getAllTodos() {
+        return todoService.getAllTodos();
     }
 
-
-    @PostMapping("/add")
-    public String addTodo(@ModelAttribute Todo todo) {
-        todoService.saveTodo(todo);
-        return "redirect:/";
+    @PostMapping
+    public Todo addTodo(@RequestBody Todo todo) {
+        return todoService.saveTodo(todo);
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteTodo(@PathVariable Integer id) {
+    @DeleteMapping("/{id}")
+    public void deleteTodo(@PathVariable Integer id) {
         todoService.deleteTodoById(id);
-        return "redirect:/";
     }
 
-    @PostMapping("/complete/{id}")
-    public String completeTodo(@PathVariable Integer id) {
+    @PutMapping("/complete/{id}")
+    public Todo completeTodo(@PathVariable Integer id) {
         Todo todo = todoService.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
         todo.setCompleted(!todo.isCompleted());
-        todoService.saveTodo(todo);
-        return "redirect:/";
+        return todoService.saveTodo(todo);
     }
 }
