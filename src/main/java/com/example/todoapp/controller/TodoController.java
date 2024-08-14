@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.todoapp.model.Todo;
 import com.example.todoapp.service.TodoService;
 
-@CrossOrigin(origins = "http://localhost:8080")  // Vue.jsのデフォルトポート
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:8081"})
+   // Vue.jsのデフォルトポート
 @RestController
 @RequestMapping("/api/todos")  // APIのベースURLを設定
 public class TodoController {
@@ -29,6 +30,7 @@ public class TodoController {
 
     @PostMapping
     public Todo addTodo(@RequestBody Todo todo) {
+        System.out.println("Received Todo: " + todo); // 受け取ったデータをログに出力
         return todoService.saveTodo(todo);
     }
 
