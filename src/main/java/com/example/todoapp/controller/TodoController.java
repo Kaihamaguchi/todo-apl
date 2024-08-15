@@ -1,5 +1,6 @@
 package com.example.todoapp.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -64,5 +65,31 @@ public class TodoController {
                            .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
     todo.setCompleted(!todo.isCompleted());
     return todoService.saveTodo(todo);
+  }
+  
+  /**
+   * 指定したIDのToDoの期限を更新するメソッド。
+   *
+   * @param id 更新するToDoのID
+   * @param deadline 新しい期限
+   * @return 更新されたToDo
+   */
+  @PutMapping("/deadline/{id}")
+  public Todo updateDeadline(@PathVariable Integer id, @RequestBody LocalDate deadline) {
+      Todo todo = todoService.findById(id)
+              .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
+      todo.setDeadline(deadline);
+      return todoService.saveTodo(todo);
+  }
+
+  /**
+   * 期限が過ぎたToDoを取得するメソッド。
+   *
+   * @param date 現在の日付
+   * @return 期限が過ぎたToDoのリスト
+   */
+  @GetMapping("/expired/{date}")
+  public List<Todo> getExpiredTodos(@PathVariable LocalDate date) {
+      return todoService.findExpiredTodos(date);
   }
 }

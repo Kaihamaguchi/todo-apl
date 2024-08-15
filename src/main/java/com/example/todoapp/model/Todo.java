@@ -1,5 +1,6 @@
 package com.example.todoapp.model;
 
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +14,7 @@ public class Todo {
     private Integer id;
     private String title;
     private boolean completed;
+    private LocalDate deadline;
 
     public Todo() {}
 
@@ -44,4 +46,11 @@ public class Todo {
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
+    public LocalDate getDeadline() {
+      return deadline;
+  }
+
+  public void setDeadline(LocalDate deadline) {
+      this.deadline = deadline;
+  }
 }

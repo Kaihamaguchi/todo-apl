@@ -1,5 +1,6 @@
 package com.example.todoapp.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +29,7 @@ public class TodoService {
     public Optional<Todo> findById(Integer id) {
         return todoRepository.findById(id);
     }
+    public List<Todo> findExpiredTodos(LocalDate date) {
+      return todoRepository.findByDeadlineBefore(date);
+  }
 }
