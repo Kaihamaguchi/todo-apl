@@ -14,36 +14,55 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.todoapp.model.Todo;
 import com.example.todoapp.service.TodoService;
 
-@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:8081"})
-   // Vue.jsのデフォルトポート
+@CrossOrigin(origins = { "http://localhost:8080", "http://localhost:8081" })
+// Vue.jsのデフォルトポート
 @RestController
-@RequestMapping("/api/todos")  // APIのベースURLを設定
+@RequestMapping("/api/todos") // APIのベースURLを設定
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
+  @Autowired
+  private TodoService todoService;
 
-    @GetMapping
-    public List<Todo> getAllTodos() {
-        return todoService.getAllTodos();
-    }
+  /**
+   * タスクの一覧を取得する
+   * 
+   * @return タスク一覧
+   */
+  @GetMapping
+  public List<Todo> getAllTodos() {
+    return todoService.getAllTodos();
+  }
 
-    @PostMapping
-    public Todo addTodo(@RequestBody Todo todo) {
-        System.out.println("Received Todo: " + todo); // 受け取ったデータをログに出力
-        return todoService.saveTodo(todo);
-    }
+  /**
+   * 新規タスクを追加する
+   * 
+   * @param todo タスクの入力値
+   * @return 保存された入力値
+   */
+  @PostMapping
+  public Todo addTodo(@RequestBody Todo todo) {
+    return todoService.saveTodo(todo);
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Integer id) {
-        todoService.deleteTodoById(id);
-    }
+  /**
+   * タスクを削除する
+   */
+  @DeleteMapping("/{id}")
+  public void deleteTodo(@PathVariable Integer id) {
+    todoService.deleteTodoById(id);
+  }
 
-    @PutMapping("/complete/{id}")
-    public Todo completeTodo(@PathVariable Integer id) {
-        Todo todo = todoService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
-        todo.setCompleted(!todo.isCompleted());
-        return todoService.saveTodo(todo);
-    }
+  /**
+   * タスクを完了させる
+   * 
+   * @param id タスクのID
+   * @return 更新されたタスク
+   */
+  @PutMapping("/complete/{id}")
+  public Todo completeTodo(@PathVariable Integer id) {
+    Todo todo = todoService.findById(id)
+                           .orElseThrow(() -> new IllegalArgumentException("Invalid todo Id:" + id));
+    todo.setCompleted(!todo.isCompleted());
+    return todoService.saveTodo(todo);
+  }
 }
